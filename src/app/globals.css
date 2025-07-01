@@ -29,6 +29,17 @@ body {
 
 @layer components{
   .infoText{
-    @apply p-4 bg-purple-700/10 rounded-lg max-w-[300px]
+    @apply p-4 bg-purple-700/10 rounded-lg max-w-[300px] mb-2;
+
   }
+
+  .chatRow{
+    @apply rounded-lg p-2 text-sm flex items-center justify-center space-x-2 space-y-2 m-2.5 hover:bg-gray-700/70 dark:hover:bg-gray-800 cursor-pointer text-gray-300 transition-all duration-200 ease-out;
+  }
+
+  .chatRowDisplay{
+    @apply flex flex-col items-center justify-between ;
+
+  }
+  
 }

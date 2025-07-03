@@ -10,13 +10,16 @@ jobs:
     steps:
       - name: Set up workspace
         run: mkdir -p output
-
-      - name: Write .env.local with secrets
+      - name: Prepare output folder and write .env.local
         run: |
+          mkdir -p output
           echo "GOOGLE_ID=${{ secrets.GOOGLE_ID }}" >> output/.env.local
           echo "GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET }}" >> output/.env.local
           echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> output/.env.local
           echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> output/.env.local
+          echo "---- .env.local contents ----"
+          cat output/.env.local
+
 
       - name: Upload .env.local as artifact
         uses: actions/upload-artifact@v4

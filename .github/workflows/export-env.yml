@@ -6,7 +6,9 @@ on:
 jobs:
   export-env:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./
     steps:
       - name: Set up workspace
         run: mkdir -p output

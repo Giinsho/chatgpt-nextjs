@@ -28,5 +28,4 @@ function ColumnCard({ column }: { column: Column }) {
     </div>
   );
 }
-
 export default ColumnCard;

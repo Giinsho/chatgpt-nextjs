@@ -21,8 +21,7 @@ jobs:
           cat output/.env.local
       - name: List output directory before upload
         run: ls -la output
-      - name: Upload .env.local as artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.6.2
         with:
-          name: env-local
-          path: output/{*,.*}
+          path: output/.env.local

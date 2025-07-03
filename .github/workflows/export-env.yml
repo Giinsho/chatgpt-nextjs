@@ -1,22 +1,25 @@
-name: Export Secrets as .env
+name: Export .env.local
 
 on:
-  workflow_dispatch: # manually triggered
+  workflow_dispatch:
 
 jobs:
   export-env:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create .env file from secrets
+      - name: Set up workspace
+        run: mkdir -p output
+
+      - name: Write .env.local with secrets
         run: |
-          echo "GOOGLE_ID=${{ secrets.GOOGLE_ID }}" >> .env.local
-          echo "GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET }}" >> .env.local
-          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.local
-          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env.local
+          echo "GOOGLE_ID=${{ secrets.GOOGLE_ID }}" >> output/.env.local
+          echo "GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET }}" >> output/.env.local
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> output/.env.local
+          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> output/.env.local
 
       - name: Upload .env.local as artifact
         uses: actions/upload-artifact@v4
         with:
           name: env-local
-          path: .env.local
+          path: output/.env.local

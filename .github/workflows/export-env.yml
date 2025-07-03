@@ -18,11 +18,11 @@ jobs:
           echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> output/.env.local
           echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> output/.env.local
           echo "---- .env.local contents ----"
-          cat output/.env.local
-
-
+          cat output/*.env.local
+      - name: List output directory before upload
+        run: ls -la output
       - name: Upload .env.local as artifact
         uses: actions/upload-artifact@v4
         with:
           name: env-local
-          path: output/.env.local
+          path: output/**

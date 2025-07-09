@@ -3,7 +3,7 @@ import NewChat from "./NewChat";
 import { useSession, signOut } from "next-auth/react";
 import React from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { collection } from "firebase/firestore";
+import { collection, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 import ChatRow from "../components/CharRow";
 function SideBar() {
@@ -13,9 +13,8 @@ function SideBar() {
   // Ensure session is loaded and exists before querying Firestore
   const [chats, loading, error] = useCollection(
     session?.user?.email
-      ? collection(db, "users", session.user.email, "chats")
-      : null
-  );
+      ? query(collection(db, "users", session.user.email, "chats"), orderBy("createdAt", "asc")
+      ) : null);
 
   console.log("Chats:", chats?.docs)
   return (

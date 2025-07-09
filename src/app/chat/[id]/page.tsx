@@ -1,14 +1,17 @@
+
 import React from 'react'
 type Props = {
-    params: {
-        id: string;
-    };
+    params: Promise<{ id: string }>;
 };
-function ChatPage({ params }: { params: { id: string } }) {
+async function ChatPage({ params }: Props) {
+    const { id } = await params
+
+    const title = id;
+
     return (
         <div>
-            <h1 className="text-white text-3xl font-bold">Chat {params.id}</h1>
-            <p className="text-gray-400 mt-2">This is the chat page for chat ID: {params.id}</p>
+            <h1 className="text-white text-3xl font-bold">Chat {title}</h1>
+            <p className="text-gray-400 mt-2">This is the chat page for chat ID: {title}</p>
 
         </div>
     )

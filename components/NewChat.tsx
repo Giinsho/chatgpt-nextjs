@@ -3,7 +3,7 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "../firebase"; 
+import { db } from "../firebase";
 
 
 function NewChat() {
@@ -15,15 +15,16 @@ function NewChat() {
       return;
     }
     // Create a new chat in the database
-    const doc  = await addDoc(
-      collection(db, "users", session.user?.email!, "chats"),{  
-        messages: [],
-        userId: session.user?.email,
-        createdAt: serverTimestamp(),
-      }
+    const doc = await addDoc(
+      collection(db, "users", session.user?.email!, "chats"), {
+      messages: [],
+      userId: session.user?.email,
+      createdAt: serverTimestamp(),
+      name: "New Chat"
+    }
     );
     // Redirect to the new chat page
-    router.push(`/chat/${doc.id}`);
+    await router.push(`/chat/${doc.id}`);
 
 
   };

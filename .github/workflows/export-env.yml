@@ -1,0 +1,31 @@
+name: Export .env.local
+
+on:
+  workflow_dispatch:
+
+jobs:
+  export-env:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    steps:
+      - name: Set up workspace
+        run: mkdir -p output
+      - name: Prepare output folder and write .env.local
+        run: |
+          mkdir -p output
+          echo "GOOGLE_ID=${{ secrets.GOOGLE_ID }}" >> output/.env.local
+          echo "GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET }}" >> output/.env.local
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> output/.env.local
+          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> output/.env.local
+          echo "---- .env.local contents ----"
+          cat output/.env.local
+      - name: List output directory before upload
+        run: ls -la output
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: my-artifact
+          include-hidden-files: true
+          path: output/.env.local

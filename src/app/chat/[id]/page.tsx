@@ -4,6 +4,7 @@ import ChatInput from '@/app/pages/ChatInput';
 import Chat from '@/app/pages/Chat';
 import React, { useState, use } from 'react';
 import { Copy } from 'lucide-react';
+import Scrape from '../../../../components/Scrape';
 
 type Props = {
     params: Promise<{ id: string }>;
@@ -43,6 +44,7 @@ function ChatPage({ params }: Props) {
                             <option value="gemini">Gemini</option>
                             <option value="claude">Claude</option>
                         </select>
+                        <Scrape></Scrape>
                     </div>
 
                     {/* Theme Toggle */}

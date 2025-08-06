@@ -9,4 +9,7 @@ export const authOptions = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+  
 };
+
+console.log(authOptions.providers, authOptions.secret)

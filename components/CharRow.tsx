@@ -8,6 +8,8 @@ import {
     deleteDoc,
     doc,
     updateDoc,
+    getDoc,
+    
 } from 'firebase/firestore';
 import Link from 'next/link';
 import React, { useState, useRef, useEffect } from 'react';
@@ -22,10 +24,9 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 import { db } from '../firebase';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
-
 type Props = {
     id: string;
-    date: Timestamp;
+    date?: Timestamp;
 };
 
 function ChatRow({ id, date }: Props) {
@@ -37,6 +38,7 @@ function ChatRow({ id, date }: Props) {
     const [newName, setNewName] = useState('');
     const menuRef = useRef<HTMLDivElement>(null);
     const renameRef = useRef<HTMLInputElement>(null);
+    const [chatName, setChatName] = useState<string>('New Chat');
 
     const { data: session } = useSession();
 
@@ -44,16 +46,43 @@ function ChatRow({ id, date }: Props) {
         collection(db, 'users', session?.user?.email!, 'chats', id, 'messages')
     );
 
-    const jsDate = date?.toDate();
-    const day = jsDate?.getDate().toString().padStart(2, '0');
-    const month = (jsDate?.getMonth() + 1).toString().padStart(2, '0');
-    const year = jsDate?.getFullYear().toString().slice(-2);
-    const hours = jsDate?.getHours().toString().padStart(2, '0');
-    const minutes = jsDate?.getMinutes().toString().padStart(2, '0');
-    const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`;
 
-    // Get last message
-    const lastMessage = messages?.docs[messages?.docs.length - 1]?.data().text || 'New Chat';
+
+    let formattedDate = "";
+
+    if (date instanceof Timestamp) {
+        const jsDate = date.toDate();
+
+        const day = jsDate.getDate().toString().padStart(2, '0');
+        const month = (jsDate.getMonth() + 1).toString().padStart(2, '0');
+        const year = jsDate.getFullYear().toString().slice(-2);
+        const hours = jsDate.getHours().toString().padStart(2, '0');
+        const minutes = jsDate.getMinutes().toString().padStart(2, '0');
+
+        formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`;
+    } else {
+        console.warn("Invalid Firestore timestamp:", date);
+    }
+
+    // Get last message (or fallback)
+    const lastMessage = chatName;
+
+
+
+    useEffect(() => {
+        const fetchChatName = async () => {
+            if (!session?.user?.email) return;
+
+            const docSnap = await getDoc(doc(db, 'users', session.user.email, 'chats', id));
+            if (docSnap.exists()) {
+                setChatName(docSnap.data()?.name || 'New Chat');
+            } else {
+                setChatName('New Chat');
+            }
+        };
+
+        fetchChatName();
+    }, [session, id]);
 
     // Close menu on outside click
     useEffect(() => {
@@ -74,13 +103,14 @@ function ChatRow({ id, date }: Props) {
     };
 
     const handleRename = () => {
-        setNewName(lastMessage); // Set current name as placeholder
+        setNewName(lastMessage);
         setRenameOpen(true);
         setMenuOpen(false);
     };
 
     const submitRename = async () => {
         if (!newName.trim()) return;
+        setChatName(newName.trim());
         await updateDoc(doc(db, 'users', session?.user?.email!, 'chats', id), {
             name: newName.trim(),
         });
@@ -160,7 +190,7 @@ function ChatRow({ id, date }: Props) {
                 className="flex-1 mx-2 truncate flex flex-row items-center justify-center space-x-2"
             >
                 <div className="chatRowDisplay">
-                    <p className="truncate">{lastMessage}</p>
+                    <p className="truncate">{lastMessage.substring(0, 26) + ' ...'}</p>
                     <p className="text-gray-400 text-sm">Last message at {formattedDate}</p>
                 </div>
                 <ChevronRightIcon className=" h-5 w-5 text-gray-400 hover:text-orange-300" />

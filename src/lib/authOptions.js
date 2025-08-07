@@ -6,10 +6,17 @@ export const authOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        };
+      },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  
 };
 
-console.log(authOptions.providers, authOptions.secret)
+console.log(authOptions.providers, authOptions.secret);

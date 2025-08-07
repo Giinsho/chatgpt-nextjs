@@ -17,6 +17,8 @@ export async function GET() {
       }
     );
 
+  
+
     const $ = cheerio.load(data);
     const models: string[] = [];
 

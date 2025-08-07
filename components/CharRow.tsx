@@ -117,6 +117,8 @@ function ChatRow({ id, date }: Props) {
         setRenameOpen(false);
     };
 
+
+
     useEffect(() => {
         if (!pathname) return;
         setActive(pathname.includes(id));

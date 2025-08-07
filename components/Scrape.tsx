@@ -4,7 +4,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-export default function HomePage() {
+export default function Scraper() {
   const [models, setModels] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 

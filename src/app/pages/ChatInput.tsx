@@ -11,6 +11,8 @@ type Props = {
 };
 import { toast } from 'react-hot-toast';
 
+import ModelSelection from '../../../components/ModelSelection';
+
 function ChatInput({ chatId, model }: Props) {
     const [message, setMessage] = useState('');
     const { data: session } = useSession();
@@ -21,12 +23,12 @@ function ChatInput({ chatId, model }: Props) {
         const input = message.trim();
         setMessage('');
 
-        console.log(`${e.type} event triggered`);
+
         if (input === '' || !session) {
             console.warn('Message is empty or user is not authenticated');
             return;
         }
-        console.log('Sending message:', message);
+
 
         const messageData: Message = {
             text: input,
@@ -43,7 +45,6 @@ function ChatInput({ chatId, model }: Props) {
         //Toast notification for message sent and loading state
         const notification = toast.loading('Chat gpt is thinking...');
 
-
         await fetch('/api/askQuestion', {
             method: 'POST',
             headers: {
@@ -56,7 +57,6 @@ function ChatInput({ chatId, model }: Props) {
                 session
             }),
         }).then(() => {
-            console.log('Message sent successfully')
             //Toast notification
             toast.success('ChatGPT has responded!', {
                 id: notification,
@@ -94,6 +94,7 @@ function ChatInput({ chatId, model }: Props) {
                     placeholder="Ask anything..."
                 />
             </form>
+
         </div>
     );
 }

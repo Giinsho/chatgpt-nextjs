@@ -1,23 +1,25 @@
 import React from "react";
 
+type Row = {
+  id: string;
+  question: string;
+};
+
+type Column = {
+  id: string;
+  title: string;
+  icon?: React.ReactNode; // opcjonalne pole dla ikony
+  rows: Row[];            // tablica wierszy
+};
+
 function ColumnCard({ column }: { column: Column }) {
-  type Row = {
-    id: string;
-    question: string;
-  };
-
-  type Column = {
-    id: string;
-    title: string;
-  };
-
   return (
-    <div>
-      <div className="flex flex-col items-center justify-center mb-5">
+    <div className=" sm:flex-row">
+      <div className="flex flex-col  items-center justify-center ">
         <div className="flex items-center justify-center w-12 h-12 mb-2">
           {column.icon}
         </div>
-        <h2 className="">{column.title}</h2>
+        <h2>{column.title}</h2>
       </div>
 
       {column.rows.map((row) => (
@@ -28,4 +30,5 @@ function ColumnCard({ column }: { column: Column }) {
     </div>
   );
 }
+
 export default ColumnCard;

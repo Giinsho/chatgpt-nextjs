@@ -48,8 +48,8 @@ export default async function RootLayout({
               <Login />
             </div>
           ) : (
-            <div className="flex">
-              <div className="bg-[#11153a7a] max-w-xs  flex flex-col overflow-y-auto md:min-w-[20rem]">
+            <div className="flex flex-col sm:flex-row">
+              <div className="bg-[#11153a7a]   flex flex-col overflow-y-auto md:min-w-[20rem] sm:flex-row  sm:overflow-y-auto justify-center  ">
                 {/*Sidebar */}
                 <SideBar />
               </div>
@@ -57,7 +57,7 @@ export default async function RootLayout({
               {/*Client provider - Notifications */}
               <ClientProvider />
 
-              <div className="bg-[#2d2b55] flex-1">{children}</div>
+              <div className="bg-[#2d2b55] flex-1  sm:overflow-y-auto  flex flex-col ">{children}</div>
             </div>
           )}
         </SessionProvider>

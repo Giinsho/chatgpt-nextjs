@@ -17,10 +17,9 @@ function NewChat() {
 
 
     try {
-      console.log(session)
-      console.log(session.user?.email)
+
       const userss = collection(db, "users");
-      console.log("", collection(db, "users", session.user?.email!, "chats"))
+
       // WRITE TEST
       await setDoc(doc(db, "auth", "testDoc"), {
         message: "Hello Firestore"
@@ -28,7 +27,7 @@ function NewChat() {
 
       // READ TEST
       const snap = await getDoc(doc(db, "auth", "testDoc"));
-      console.log(snap.data());
+
     }
     catch (error) {
       console.log("ERROR", error)
@@ -57,7 +56,7 @@ function NewChat() {
   };
   return (
     <div onClick={createNewChat} className="border-gray-700 border chatRow ">
-      <PlusIcon className="h-4 w-4 text-yellow-100" />
+      <PlusIcon className="h-4 w-4 m-1 text-yellow-100" />
       <p>New Chat</p>
     </div>
   );

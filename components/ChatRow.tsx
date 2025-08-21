@@ -9,7 +9,7 @@ import {
     doc,
     updateDoc,
     getDoc,
-    
+
 } from 'firebase/firestore';
 import Link from 'next/link';
 import React, { useState, useRef, useEffect } from 'react';
@@ -23,7 +23,9 @@ import {
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { db } from '../firebase';
 import { useSession } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+
+import NextAuth from 'next-auth';
 type Props = {
     id: string;
     date?: Timestamp;
@@ -32,7 +34,7 @@ type Props = {
 function ChatRow({ id, date }: Props) {
     const pathname = usePathname();
     const [active, setActive] = useState(false);
-
+    const router = useRouter();
     const [menuOpen, setMenuOpen] = useState(false);
     const [renameOpen, setRenameOpen] = useState(false);
     const [newName, setNewName] = useState('');
@@ -98,8 +100,10 @@ function ChatRow({ id, date }: Props) {
 
     const handleDelete = async () => {
         await deleteDoc(doc(db, 'users', session?.user?.email!, 'chats', id));
-        console.log('Deleting chat:', id);
+
         setMenuOpen(false);
+        await router.push(`/`);
+
     };
 
     const handleRename = () => {
@@ -125,9 +129,9 @@ function ChatRow({ id, date }: Props) {
     }, [pathname]);
 
     return (
-        <div className={`flex items-center justify-between p-2 ${active && 'bg-sky-900/50  px-1 rounded '}`}>
+        <div className={`flex items-center justify-between p-1 ${active && 'bg-sky-900/50  px- rounded '}`}>
             {/* Left: menu icon + dropdown */}
-            <div className="relative mr-2" ref={menuRef}>
+            <div className="relative mr-2 hidden sm:inline" ref={menuRef} >
                 <EllipsisHorizontalIcon
                     onClick={(e) => {
                         e.stopPropagation();
@@ -189,11 +193,11 @@ function ChatRow({ id, date }: Props) {
             {/* Middle: the link */}
             <Link
                 href={`/chat/${id}`}
-                className="flex-1 mx-2 truncate flex flex-row items-center justify-center space-x-2"
+                className="flex-1 truncate flex flex-row items-center justify-center space-x-2"
             >
                 <div className="chatRowDisplay">
                     <p className="truncate">{lastMessage.substring(0, 26) + ' ...'}</p>
-                    <p className="text-gray-400 text-sm">Last message at {formattedDate}</p>
+                    <p className="text-gray-400 text-sm hidden sm:inline">Last message at {formattedDate}</p>
                 </div>
                 <ChevronRightIcon className=" h-5 w-5 text-gray-400 hover:text-orange-300" />
             </Link>

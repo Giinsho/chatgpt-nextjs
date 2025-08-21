@@ -19,8 +19,7 @@ const query = async (prompt: string, model: string) => {
       if (error.status === 429) {
         console.error("Quota exceeded. Upgrade your OpenAI plan.");
         return {
-          content:
-            `⚠️ Quota exceeded. Please check your OpenAI plan or billing. ${error.message}`,
+          content: `⚠️ Quota exceeded. Please check your OpenAI plan or billing. ${error.message}`,
         };
       }
       console.error(
